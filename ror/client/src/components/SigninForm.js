@@ -1,29 +1,67 @@
 import Input from "./Input";
 import Button from "./Button";
-import styled from "styled-components";
+import StatusBar from "./StatusBar";
+import Form from "./Form";
+import { useState } from "react";
 
-const Form = styled.form`
-border: 4px solid #f7a;
-background-color: #fdd;
-`
+function SigninForm({ setUser, setUserIsNew }) {
 
-function SigninForm() {
+  const [formData, setFormData] = useState({})
+  const [errors, setErrors] = useState([])
+
+  const login = e => {
+    e.preventDefault();
+    const config = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+      },
+      body: JSON.stringify(formData),
+    }
+    fetch("/login", config)
+    .then(r => {
+      if (r.ok) {
+        return r.json().then(setUser)
+      } else {
+        return r.json().then(info => setErrors(info.errors))
+      }
+    })
+    .catch(error => console.error("MAYDAAAAAAAYYY ==>", error))
+  }
+
+  const handleFormChange = e => {
+    e.preventDefault();
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    })
+  }
   
   return (
     <>
       <h2>Sign In</h2>
       <Form>
+        {errors.map(error => <StatusBar key={error} status="error">{error}</StatusBar>)}
         <Input 
           name="username"
           label="Username"
           type="text"
+          value={formData.username || ""}
+          onChange={handleFormChange}
         />
         <Input 
           name="password"
           label="Password"
-          type="text"
+          type="password"
+          value={formData.password || ""}
+          onChange={handleFormChange}
         />
-        <Button>Login</Button>
+        <Button onClick={login}>Login</Button>
+        <Button onClick={e => {
+          e.preventDefault();
+          setUserIsNew(true);
+        }}>Don't Have One?</Button>
       </Form>
     </>
   )

@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# This file is what Docker uses to run the app each time the container is
+# started. No modifications are needed here.
+
+bundle check || bundle install
+
+# Creating and migrating the database, if it is not already done
+bundle exec rails db:create db:migrate
+# The database runs on local IP 0.0.0.0, so we must do the same here. No one on
+# the internet seems to know why.
+bundle exec rails s -b '0.0.0.0'

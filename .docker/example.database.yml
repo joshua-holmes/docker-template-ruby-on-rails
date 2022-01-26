@@ -1,8 +1,12 @@
+# After your rails application is created, replace the ror/config/database.yml
+# config file with this one. Make sure to rename the file aftwards so the name
+# of the active config file is still ror/config/database.yml
+
 default: &default
   adapter: postgresql
   encoding: unicode
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  # "host" key is required for the Docker network between app and database
+    # "host" key is required for the Docker network between app and database
   host: <%= "database" if ENV["POSTGRES_PASSWORD"] %>
   # Database username and password are set in the project folder ./.docker/.env
   username: <%= ENV["POSTGRES_USER"] %>
@@ -23,4 +27,3 @@ test:
 production:
   <<: *default
   database: psql_production
-  

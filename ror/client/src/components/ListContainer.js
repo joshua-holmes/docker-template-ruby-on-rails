@@ -1,5 +1,6 @@
 import ListItem from "./ListItem";
 import ListForm from "./ListForm";
+import Container from "./Container";
 
 import styled from "styled-components";
 import { useState } from "react";
@@ -11,6 +12,9 @@ box-shadow: -1px 5px 10px darkgray;
 `
 const List = styled.ul`
 margin: 0;
+`
+const Greeting = styled.h2`
+margin: 20px;
 `
 
 function ListContainer({ userState }) {
@@ -37,7 +41,7 @@ function ListContainer({ userState }) {
       },
       body: JSON.stringify({name: name}),
     }
-    fetch("/todos", config)
+    fetch("/api/todos", config)
     .then(r => {
       if (r.ok) {
         !!error && setError();
@@ -57,7 +61,7 @@ function ListContainer({ userState }) {
         "Accept": "application/json",
       },
     }
-    fetch(`/todos/${id}`, config)
+    fetch(`/api/todos/${id}`, config)
     .then(r => {
       if (r.ok) {
         !!error && setError();
@@ -73,6 +77,7 @@ function ListContainer({ userState }) {
   return (
     <Paper>
       {!!error && <StatusBar status="error">{error}</StatusBar>}
+      <Greeting>Hi, {user.name}!</Greeting>
       <ListForm handleAdd={addItem} />
       <List>
         {user.todos.map(todo => (

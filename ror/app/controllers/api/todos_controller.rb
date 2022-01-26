@@ -1,4 +1,4 @@
-class TodosController < ApplicationController
+class Api::TodosController < ApplicationController
 
   def create
     todo = @current_user.todos.create!(name: params[:name])

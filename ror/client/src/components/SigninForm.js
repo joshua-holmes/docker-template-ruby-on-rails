@@ -19,7 +19,7 @@ function SigninForm({ setUser, setUserIsNew }) {
       },
       body: JSON.stringify(formData),
     }
-    fetch("/login", config)
+    fetch("/api/login", config)
     .then(r => {
       if (r.ok) {
         return r.json().then(setUser)

@@ -27,7 +27,7 @@ function SignupForm({ setUser, setUserIsNew }) {
       },
       body: JSON.stringify(formData),
     }
-    fetch("/users", config)
+    fetch("/api/users", config)
     .then(r => {
       if (r.ok) {
         return r.json().then(setUser)

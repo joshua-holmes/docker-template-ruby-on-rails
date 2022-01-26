@@ -56,7 +56,7 @@ font-size: 3em;
 function NavBar({ isLoggedIn, setUser }) {
 
   const logout = () => {
-    fetch("/logout", {method: "DELETE"})
+    fetch("/api/logout", {method: "DELETE"})
     .then(() => setUser())
     .catch(error => console.error("BLIMEY!! Something went wrong... ==>", error))
   }

@@ -10,7 +10,7 @@ function App() {
   const [user, setUser] = useState()
 
   useEffect(() => {
-    fetch("/me")
+    fetch("/api/me")
     .then(r => {
       if (r.ok) {
         return r.json().then(userData => {
@@ -24,7 +24,6 @@ function App() {
     })
     .catch(error => console.error("MAYDAAAAAAAYYY ==>", error))
   }, [])
-  console.log("UUUUUUSER", user)
 
   return (
     <>

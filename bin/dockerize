@@ -36,7 +36,7 @@ accept=false
 while :
 do
   echo ""
-  echo "Would you like to overwrite this database config file: 'ror/config/database.yml'?"
+  echo "Are you sure you would like to overwrite this database config file: 'ror/config/database.yml'? (save a copy if you are unsure)"
   echo $looping
   read -n 1 -p " (Y/n): " input
   if [ "$input" = "y" ] || [ "$input" = "Y" ] || [ "$input" = "" ]; then
@@ -70,11 +70,11 @@ echo "Created .docker/.env file"
 echo "---------------------------------------------------------------"
 
 # Find port in YAML file and change it
-ruby change-port.rb "$port"
+ruby $DIRECTORY/change-port.rb "$port"
 echo "---------------------------------------------------------------"
 echo "Wrote port number '$port' to docker-compose.yml."
 echo "---------------------------------------------------------------"
 
-./build-frontend
+$DIRECTORY/build-frontend
 
 echo "Your app has been Dockerized!!"

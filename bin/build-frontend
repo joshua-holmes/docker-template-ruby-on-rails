@@ -20,4 +20,4 @@ echo "Moved static files from React app into ror/public/"
 echo "---------------------------------------------------------------"
 
 echo "---------------------------------------------------------------"
-echo "Update successful"
+echo "Frontend successfully built into RoR application"

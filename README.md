@@ -7,7 +7,7 @@ _Note: If you are using React Router Dom with your app, please visit that sectio
 
 ## Instructions: Speedy Version!
 1. Copy and paste your React on Rails application (or make a new one) inside `ror/` so that `ror/` is the root directory of your RoR app.
-2. Run `bin/dockerize -p <PORT_NUMBER>` in your project's local root directory where `<PORT_NUMBER>` is a port number you want your Docker Container to run on. Here is an example:
+2. Run `bin/dockerize -p <PORT_NUMBER>` in your project's local root directory where `<PORT_NUMBER>` is a port number you want your Docker Container to run on. Type `y` or press enter when prompted to overwrite. Here is an example:
 ```
 # (example) in your local repo, run:
 bin/dockerize -p 3001

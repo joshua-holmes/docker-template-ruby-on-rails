@@ -16,7 +16,7 @@ echo "---------------------------------------------------------------"
 
 mv $DIRECTORY/../ror/client/build/* $DIRECTORY/../ror/public/
 echo "---------------------------------------------------------------"
-echo "Moved static files from React app into ror/public/ directory"
+echo "Moved static files from React app into ror/public/"
 echo "---------------------------------------------------------------"
 
 echo "---------------------------------------------------------------"

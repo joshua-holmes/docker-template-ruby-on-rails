@@ -1,0 +1,80 @@
+#!/bin/bash
+set -e
+echo ""
+
+### DO NOT run this script in the server repo.
+### It will overwrite files that you previously had configured.
+
+# Get port flag
+while getopts p: flag
+do
+  case "${flag}" in
+    p) port=${OPTARG};;
+  esac
+done
+
+# Sets DIRECTORY variable to current directory of this file
+DIRECTORY=$(dirname "${BASH_SOURCE[0]}")
+
+
+# Testing for Python
+echo "This program requires either python or python3"
+which python3 || which python
+echo "Test for Pyton succeeded"
+echo ""
+
+# Testing for port number
+if [ "$port" = "" ]; then
+  echo "Port number was empty. Try including a -p flag with a number after it, like this:"
+  echo "bin/dockerize -p 3000"
+  echo "exiting..."
+  exit 1
+fi
+
+# Get user response on overwriting a file
+accept=false
+while :
+do
+  echo ""
+  echo "Would you like to overwrite this database config file: 'ror/config/database.yml'?"
+  echo $looping
+  read -n 1 -p " (Y/n): " input
+  if [ "$input" = "y" ] || [ "$input" = "Y" ] || [ "$input" = "" ]; then
+    accept=true
+    break
+  elif [ "$input" = "n" ] || [ "$input" = "N" ]; then
+    break
+  else
+    echo ""
+    echo ""
+    echo "That was not a valid response"
+  fi
+done
+echo ""
+# Handle action based on user response
+if [ "$accept" = "true" ]; then
+  cp $DIRECTORY/../.docker/example.database.yml $DIRECTORY/../ror/config/database.yml
+  echo "---------------------------------------------------------------"
+  echo "Overwrote ror/config/database.yml"
+  echo "---------------------------------------------------------------"
+else
+  echo "---------------------------------------------------------------"
+  echo "Overwrite denied. Please handle this config file manually."
+  echo "---------------------------------------------------------------"
+fi
+
+# Create .env file from example.env
+cp $DIRECTORY/../.docker/example.env $DIRECTORY/../.docker/.env
+echo "---------------------------------------------------------------"
+echo "Created .docker/.env file"
+echo "---------------------------------------------------------------"
+
+# Find port in YAML file and change it
+python3 change-port.py "$port" || python change-port.py "$port"
+echo "---------------------------------------------------------------"
+echo "Wrote port number '$port' to docker-compose.yml."
+echo "---------------------------------------------------------------"
+
+./build-frontend
+
+echo "Your app has been Dockerized!!"

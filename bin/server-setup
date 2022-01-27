@@ -1,0 +1,59 @@
+#!/bin/bash
+set -e
+echo ""
+
+### DO NOT run this script in your local repo. It is meant for the server repo.
+
+# Sets DIRECTORY variable to current directory of this file
+DIRECTORY=$(dirname "${BASH_SOURCE[0]}")
+
+# Get flags
+while getopts u:p:m: flag
+do
+  case "${flag}" in
+    u) username=${OPTARG};;
+    p) password=${OPTARG};;
+    m) master_key=${OPTARG};;
+  esac
+done
+
+# Require that password is entered
+if [ "$password" = "" ]; then
+  echo "Password is required. Specify password with -p flag and wrap the password in single quotes."
+  echo "For example: bin/server-setup -p 'Secur3P@Sw0rD'"
+  echo "Exiting..."
+  exit 1
+fi
+
+# Check that master key is entered
+if [ "$master_key" = "" ]; then
+  echo "Master key was not entered with -m flag. Enter your master key now (found in your local repo ror/config/master.key)."
+  echo "If you already have your key stored in this repo, then you can skip this by pressing enter."
+  read master_key
+fi
+
+# Create .env file from example.env
+cp $DIRECTORY/../.docker/example.env $DIRECTORY/../.docker/.env
+sed -i -e "s/POSTGRES_PASSWORD=\S*$/POSTGRES_PASSWORD=$password/" $DIRECTORY/../.docker/.env
+if [ "$username" != "" ]; then
+  sed -i -e "s/POSTGRES_USER=\S*$/POSTGRES_USER=$username/" $DIRECTORY/../.docker/.env
+fi
+echo "---------------------------------------------------------------"
+echo "Created .docker/.env file and set credentials"
+echo "---------------------------------------------------------------"
+
+# Create master.key file
+if [ "$master_key" != "" ]; then
+  echo $master_key > $DIRECTORY/../ror/config/master.key
+  echo "---------------------------------------------------------------"
+  echo "Master key entered in ror/config/master.key"
+  echo "---------------------------------------------------------------"
+else
+  echo "---------------------------------------------------------------"
+  echo "Master key skipped, as per request of the user."
+  echo "---------------------------------------------------------------"
+fi
+
+echo "---------------------------------------------------------------"
+echo "Setup successful!"
+echo "Exiting..."

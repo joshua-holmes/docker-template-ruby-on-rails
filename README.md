@@ -3,24 +3,33 @@
 ## What Did I Just Do? 
 This project serves as a template that will allow you to toss your React on Rails (Ruby on Rails backend with React fronend) application into a folder, configure a few settings, then quickly have a Dockerized app with it's own contained environment! From there, the app can be deployed on a VPS (Virtual Private Server) with almost no environment configuration. Using Docker also makes it easier to manage multiple apps running on the same VPS, which makes it very cost-effective when you have more than a few apps deployed. This template aims to make Docker as easy to setup as it is to use!
 
-## Installation Instructions
-### _5-second automatic version_
-1. Run 
-
-### _5-minute manual version_
-1. Copy and paste your React on Rails application inside `ror/` so that `ror/` is the root directory of your RoR app.
-2. In `.docker/` copy the `.env.example` file into the same directory and rename it `.env`. You do not need to change any variables here in your local repository, but you will need to configure this file on your server repo.
-3. Copy and paste the contents of `.docker/example.database.yml` into `ror/config/database.yml` and replace the contents inside, being careful of any database configurations you have already set for your project (if any).
-4. Open `docker-compose.yml` file in this project's root directory and change the first port number only, to specify which port you want your app to run on. For example change it to `"4000:3000"` if you want to run the app on port 4000. Do not change the second number.
-5. Open your terminal in the root directory and enter `bin/build-frontend`.
-6. **Your app is now Dockerized!!** Visit the 'Operation Instructions' section below to read about how to get the app on your server and run Docker Compose, if you have never used it before.
-
 _Note: If you are using React Router Dom with your app, please visit that section below, as there are a few extra steps for deployment. The steps are not Docker specific. It would be the same steps, regardless of the deployment method._
 
-## Operation Instructions
-1. You can now upload your app to GitHub and then pull it down onto your server. Once on your server, go to `.docker/` directory in your server project repo and repeat step 2 above. This time, choose a secure password and set the correct variable to your chosen password.
-2. Now copy the master key from your local repo in `ror/config/master.key` and paste that key either into `ror/config/master.key` on your server repo, _or_ uncomment the `RAILS_MASTER_KEY` variable in the `.docker/.env` and paste the key in that line in on your server repo.
-3. **You can run your app now!!** Make sure Docker and Docker Compose are installed on your server, then **run `sudo docker compose up --build -d`** from your project's root directory to build the image on your server and run your app. To see your app, **visit `http://<YOUR_SERVERS_PUBLIC_IP>:<PORT>`**. To take down your app, run `sudo docker compose down`. If your app is running and you've made changes to it and want to update the app on the server, I've included a useful script that will automatically run `git pull`, bring your app offline, rebuild the static frontend files, rebuild the Docker image, and bring it back online, all in one command! **Simply run `bin/update-app`** from the root directory.
+## Instructions: Speedy Version!
+1. Copy and paste your React on Rails application (or make a new one) inside `ror/` so that `ror/` is the root directory of your RoR app.
+2. Run `bin/dockerize -p <PORT_NUMBER>` in your project's local root directory where `<PORT_NUMBER>` is a port number you want your Docker Container to run on. Here is an example:
+```
+# (example) in your local repo, run:
+bin/dockerize -p 3001
+```
+3. Upload your project to GitHub and then pull it down onto your server. Now in your project's server repo, run `bin/server-setup -p '<DB_PASSWORD>' -m <MASTERKEY>`. The masterkey is found in your local project repo: `ror/config/master.key`. The password is your database password and you are creating a new one here. **Notice** the password is wrapped in single quotes. That is to prevent bash from trying to interpret special characters, such as '`$`'. *Optionally*, you can also add a username for your database with the -u flag. Here is an example of the entire command:
+```
+# (example) in your server repo, run:
+bin/server-setup -u username -p 'YourNewSecureP@$$w0rD' -m fakeMasterKey1234abcd5678efgh
+```
+**You can run your app now!!** Make sure Docker and Docker Compose are installed on your server, then **run `sudo docker compose up --build -d`** from your project's root directory to build the image on your server and run your app. To see your app, **visit `http://<YOUR_SERVERS_PUBLIC_IP>:<PORT>`**. To take down your app, run `sudo docker compose down`. If your app is running and you've made changes to it and want to update the app on the server, I've included a useful script that will automatically run `git pull`, bring your app offline, rebuild the static frontend files, rebuild the Docker image, and bring it back online, all in one command! **Simply run `bin/update-app`** from the root directory of your project.
+
+## Instructions: Manual Version (good for learning)
+1. Copy and paste your React on Rails application (or make a new one) inside `ror/` so that `ror/` is the root directory of your RoR app.
+2. In `.docker/` copy the `example.env` file into the same directory and rename it `.env`. You do not need to change any variables here in your local repository, but you will need to configure this file on your server repo.
+3. Copy and paste the contents of `.docker/example.database.yml` into `ror/config/database.yml` and replace the contents inside, being careful of any database configurations you have already set for your project (if any).
+4. Open `docker-compose.yml` file in this project's root directory and change the first port number only, to specify which port you want your app to run on. For example change it to `"4000:3000"` if you want to run the app on port 4000. Do not change the second number.
+5. Open your terminal in the root directory of your project and enter `bin/build-frontend`.
+6. **Your app is now Dockerized!!** Visit the 'Operation Instructions' section below to read about how to get the app on your server and run Docker Compose, if you have never used it before.
+7. You can now upload your app to GitHub and then pull it down onto your server. Once on your server, go to `.docker/` directory in your server project repo and repeat step 2 above. This time, choose a secure password and set the correct variable to your chosen password.
+8. Now copy the master key from your local repo in `ror/config/master.key` and paste that key either into `ror/config/master.key` on your server repo, _or_ uncomment the `RAILS_MASTER_KEY` variable in the `.docker/.env` and paste the key in that line in on your server repo.
+
+**You can run your app now!!** Make sure Docker and Docker Compose are installed on your server, then **run `sudo docker compose up --build -d`** from your project's root directory to build the image on your server and run your app. To see your app, **visit `http://<YOUR_SERVERS_PUBLIC_IP>:<PORT>`**. To take down your app, run `sudo docker compose down`. If your app is running and you've made changes to it and want to update the app on the server, I've included a useful script that will automatically run `git pull`, bring your app offline, rebuild the static frontend files, rebuild the Docker image, and bring it back online, all in one command! **Simply run `bin/update-app`** from the root directory of your project.
 
 ## Where To Go Next
 If you are new to VPS server deployment and are wondering how you get your domain name connected, and more, here are some next steps to look into:

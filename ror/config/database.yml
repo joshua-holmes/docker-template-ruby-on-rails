@@ -1,3 +1,7 @@
+# After your rails application is created, replace the ror/config/database.yml
+# config file with this one. Make sure to rename the file aftwards so the name
+# of the active config file is still ror/config/database.yml
+
 default: &default
   adapter: postgresql
   encoding: unicode
@@ -23,4 +27,3 @@ test:
 production:
   <<: *default
   database: psql_production
-  

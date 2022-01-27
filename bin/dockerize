@@ -17,10 +17,10 @@ done
 DIRECTORY=$(dirname "${BASH_SOURCE[0]}")
 
 
-# Testing for Python
-echo "This program requires either python or python3"
-which python3 || which python
-echo "Test for Pyton succeeded"
+# Testing for Ruby
+echo "This program requires either Ruby to run"
+which ruby
+echo "Test for Ruby succeeded"
 echo ""
 
 # Testing for port number
@@ -70,7 +70,7 @@ echo "Created .docker/.env file"
 echo "---------------------------------------------------------------"
 
 # Find port in YAML file and change it
-python3 change-port.py "$port" || python change-port.py "$port"
+ruby change-port.rb "$port"
 echo "---------------------------------------------------------------"
 echo "Wrote port number '$port' to docker-compose.yml."
 echo "---------------------------------------------------------------"

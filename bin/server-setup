@@ -56,4 +56,4 @@ fi
 
 echo "---------------------------------------------------------------"
 echo "Setup successful!"
-echo "Exiting..."
+echo "You can now run your app with 'sudo docker compose up --build -d'"

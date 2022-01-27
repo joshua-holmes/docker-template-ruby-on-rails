@@ -2,20 +2,14 @@
 set -e
 
 echo "---------------------------------------------------------------"
-echo "Getting changes from git..."
-echo "---------------------------------------------------------------"
-git pull
-
-echo "---------------------------------------------------------------"
 echo "Bringing app offline..."
 echo "---------------------------------------------------------------"
 sudo docker compose down
 
-# Sets DIRECTORY variable to current directory of this file
-DIRECTORY=$(dirname "${BASH_SOURCE[0]}")
-
-# Run script that builds the React app and places it in Rails' public folder
-$DIRECTORY/build-frontend
+echo "---------------------------------------------------------------"
+echo "Getting changes from git..."
+echo "---------------------------------------------------------------"
+git pull
 
 echo "---------------------------------------------------------------"
 echo "Building and starting app back up..."

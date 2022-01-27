@@ -17,7 +17,6 @@ bin/dockerize -p 3001
 # (example) in your server repo, run:
 bin/server-setup -u username -p 'YourNewSecureP@$$w0rD' -m fakeMasterKey1234abcd5678efgh
 ```
-**You can run your app now!!** Make sure Docker and Docker Compose are installed on your server, then **run `sudo docker compose up --build -d`** from your project's root directory to build the image on your server and run your app. To see your app, **visit `http://<YOUR_SERVERS_PUBLIC_IP>:<PORT>`**. To take down your app, run `sudo docker compose down`. If your app is running and you've made changes to it and want to update the app on the server, I've included a useful script that will automatically run `git pull`, bring your app offline, rebuild the static frontend files, rebuild the Docker image, and bring it back online, all in one command! **Simply run `bin/update-app`** from the root directory of your project.
 
 ## Instructions: Manual Version (good for learning)
 1. Copy and paste your React on Rails application (or make a new one) inside `ror/` so that `ror/` is the root directory of your RoR app.
@@ -29,7 +28,12 @@ bin/server-setup -u username -p 'YourNewSecureP@$$w0rD' -m fakeMasterKey1234abcd
 7. You can now upload your app to GitHub and then pull it down onto your server. Once on your server, go to `.docker/` directory in your server project repo and repeat step 2 above. This time, choose a secure password and set the correct variable to your chosen password.
 8. Now copy the master key from your local repo in `ror/config/master.key` and paste that key either into `ror/config/master.key` on your server repo, _or_ uncomment the `RAILS_MASTER_KEY` variable in the `.docker/.env` and paste the key in that line in on your server repo.
 
+## Operating
 **You can run your app now!!** Make sure Docker and Docker Compose are installed on your server, then **run `sudo docker compose up --build -d`** from your project's root directory to build the image on your server and run your app. To see your app, **visit `http://<YOUR_SERVERS_PUBLIC_IP>:<PORT>`**. To take down your app, run `sudo docker compose down`. If your app is running and you've made changes to it and want to update the app on the server, I've included a useful script that will automatically run `git pull`, bring your app offline, rebuild the static frontend files, rebuild the Docker image, and bring it back online, all in one command! **Simply run `bin/update-app`** from the root directory of your project.
+
+***Warning:*** *When you run your app, the command line will tell you it is running on port 3000, even if this is not true. Just don't fall for it's tricks and visit the port you specified earlier. It is referring to the internal Docker port, not the external one which is the one you use when you visit your app.*
+
+***Another warning:*** *You may need to enable the port on your server firewall before being able to view the app by directly typing in the IP address and port in your browser. If you use Nginx or Apache, changing firewall settings will not be necessary because all traffic typically comes in through port 80 or 443, then is redirected to your app's port internally.*
 
 ## Where To Go Next
 If you are new to VPS server deployment and are wondering how you get your domain name connected, and more, here are some next steps to look into:
@@ -40,9 +44,9 @@ If you are new to VPS server deployment and are wondering how you get your domai
 
 ---
 
-## 5-Hour Explanation
+## Explanation
 This is an explanation of the steps taken above and is more for your education than it is necessary to read.
-### _Going over the 5-minute manual version_
+### _Going over the steps in the Manual Version_
 1. The `ror/` directory stands for Ruby on Rails or React on Rails. Your React app should then be inside the `client/` folder inside of your ruby app directory.
 2. The .docker/.env file contains environment variables that get set in your Docker Container. These variables are loaded into both the database's container and the app's container. By sharing the same environment variables, they can share useful information, like the database's password, active user and the Rails environment. The master key is also stored here. This master key is used for encrypting data and should not be public, which is why git ignores it and also why you must manually load the master key onto the server's repo, even though your local repo already has it. Rails is able to view the master key when it is stored in either the `.docker/.env` file as an environment variable, or in it's own `master.key` file in the `ror/config/` directory. Either option works for Rails, so how you store the key is entirely up to you. If you need to generate a new one, delete `ror/config/master.key` and `ror/config/credentials.yml.enc`, then run `rails credentials:edit` command in your Rails directory. That will generate a new `master.key` file, but will also recreate the credentials file. Since the credentials file is uploaded via git (which is a good thing), be sure that you update all other repos after issuing that command. The `master.key` file is ignored by git (which is also a good thing), so don't expose that file publicly.
 3. The `ror/config/database.yml` file is a configuration file for you database. In order for it to work with Docker, there are a few modifications that need to be made: A host needs to be specified and a username and password needs to be required and passed in, for security. Anything enclosed in `<%= %>` is actually ruby code. The username and password use `ENV["VAR"]` instead of `ENV.fetch("VAR")` to fetch environment variables because the first option returns `nil` if the variable is not found, while the second one throws an error. By using the first option for username and password, it allows the username and password to be optional, since those environment variables will be established in the Docker Container (via the `.docker/.env` file), and are not likely established on your computer. Essentially, a password is not required when you are running it locally, but is required when it is running on your server through Docker. Similar story with the host key. If the `POSTGRES_PASSWORD` environment variable is not found, the program assumes that you are on your local machine and does not need to specify a host. But when the database and app are running through separate containers, a host name is needed.

@@ -75,9 +75,8 @@ echo "---------------------------------------------------------------"
 echo "Wrote port number '$port' to docker-compose.yml."
 echo "---------------------------------------------------------------"
 
-if [[ $(ls $DIRECTORY/../ror/client) == *"package.json"* ]]; then
-  $DIRECTORY/build-frontend
-fi
+
+$DIRECTORY/build-frontend
 
 
 echo "Your app has been Dockerized!!"

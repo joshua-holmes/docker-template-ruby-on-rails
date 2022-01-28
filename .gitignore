@@ -38,6 +38,7 @@ coverage
 
 # production
 build
+./ror/public/*
 
 # Docker volumes
 .docker/volumes

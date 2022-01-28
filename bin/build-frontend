@@ -5,21 +5,25 @@ set -e
 
 # Sets DIRECTORY variable to current directory of this file
 DIRECTORY=$(dirname "${BASH_SOURCE[0]}")
+if [[ $(ls $DIRECTORY/../ror/client) == *"package.json"* ]]; then
+  echo "---------------------------------------------------------------"
+  echo "Building React app..."
+  echo "---------------------------------------------------------------"
+  npm install --prefix $DIRECTORY/../ror/client
+  npm run build --prefix $DIRECTORY/../ror/client
 
-echo "---------------------------------------------------------------"
-echo "Building React app..."
-echo "---------------------------------------------------------------"
-npm run build --prefix $DIRECTORY/../ror/client
+  rm -fr $DIRECTORY/../ror/public/*
+  echo "---------------------------------------------------------------"
+  echo "Removed existing static frontend files from ror/public/"
+  echo "---------------------------------------------------------------"
 
-rm -fr $DIRECTORY/../ror/public/*
-echo "---------------------------------------------------------------"
-echo "Removed existing static frontend files from ror/public/"
-echo "---------------------------------------------------------------"
+  mv $DIRECTORY/../ror/client/build/* $DIRECTORY/../ror/public/
+  echo "---------------------------------------------------------------"
+  echo "Moved static files from React app into ror/public/"
+  echo "---------------------------------------------------------------"
 
-mv $DIRECTORY/../ror/client/build/* $DIRECTORY/../ror/public/
-echo "---------------------------------------------------------------"
-echo "Moved static files from React app into ror/public/"
-echo "---------------------------------------------------------------"
-
-echo "---------------------------------------------------------------"
-echo "Frontend successfully built into RoR application"
+  echo "---------------------------------------------------------------"
+  echo "Frontend successfully built into RoR application"
+else
+  echo "No frontend detected"
+fi

@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e
 
+# Do not use this file if there is not React frontend
+
 # Sets DIRECTORY variable to current directory of this file
 DIRECTORY=$(dirname "${BASH_SOURCE[0]}")
 

@@ -1,7 +1,12 @@
-# Docker Template: React on Rails with PostgreSQL
+# Docker Template: Ruby on Rails with PostgreSQL
+Made by:<br>
+Joshua Holmes<br>
+[jpholmes.com](https://www.jpholmes.com)<br>
+[github.com/joshua-holmes](https://github.com/joshua-holmes)<br>
+[joshua.phillip.holmes@gmail.com](mailto:joshua.phillip.holmes@gmail.com)
 
-## What Did I Just Do? 
-This project serves as a template that will allow you to toss your React on Rails (Ruby on Rails backend with React fronend) application into a folder, configure a few settings, then quickly have a Dockerized app with it's own contained environment! From there, the app can be deployed on a VPS (Virtual Private Server) with almost no environment configuration. Using Docker also makes it easier to manage multiple apps running on the same VPS, which makes it very cost-effective when you have more than a few apps deployed. This template aims to make Docker as easy to setup as it is to use!
+## What Did I Just Do?
+This project serves as a template that will allow you to toss your Ruby on Rails (can optionally include React frontend) application into a folder, configure a few settings, then quickly have a Dockerized app with it's own contained environment! From there, the app can be deployed on a VPS (Virtual Private Server) with almost no environment configuration. Using Docker also makes it easier to manage multiple apps running on the same VPS, which makes it very cost-effective when you have more than a few apps deployed. This template aims to make Docker as easy to setup as it is to use!
 
 _Note: If you are using React Router Dom with your app, please visit that section below, as there are a few extra steps for deployment. The steps are not Docker specific. It would be the same steps, regardless of the deployment method._
 
@@ -23,7 +28,7 @@ bin/server-setup -u username -p 'YourNewSecureP@$$w0rD' -m fakeMasterKey1234abcd
 2. In `.docker/` copy the `example.env` file into the same directory and rename it `.env`. You do not need to change any variables here in your local repository, but you will need to configure this file on your server repo.
 3. Copy and paste the contents of `.docker/example.database.yml` into `ror/config/database.yml` and replace the contents inside, being careful of any database configurations you have already set for your project (if any).
 4. Open `docker-compose.yml` file in this project's root directory and change the first port number only, to specify which port you want your app to run on. For example change it to `"4000:3000"` if you want to run the app on port 4000. Do not change the second number.
-5. Open your terminal in the root directory of your project and enter `bin/build-frontend`.
+5. *Skip this step if you do not have a React frontend!* Open your terminal in the root directory of your project and enter `bin/build-frontend`.
 6. **Your app is now Dockerized!!** Visit the 'Operation Instructions' section below to read about how to get the app on your server and run Docker Compose, if you have never used it before.
 7. You can now upload your app to GitHub and then pull it down onto your server. Once on your server, go to `.docker/` directory in your server project repo and repeat step 2 above. This time, choose a secure password and set the correct variable to your chosen password.
 8. Now copy the master key from your local repo in `ror/config/master.key` and paste that key either into `ror/config/master.key` on your server repo, _or_ uncomment the `RAILS_MASTER_KEY` variable in the `.docker/.env` and paste the key in that line in on your server repo.

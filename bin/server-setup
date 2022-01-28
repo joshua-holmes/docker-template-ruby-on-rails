@@ -34,7 +34,7 @@ fi
 
 # Create .env file from example.env
 cp $DIRECTORY/../.docker/example.env $DIRECTORY/../.docker/.env
-sed -i -e "s/POSTGRES_PASSWORD=\S*$/POSTGRES_PASSWORD=$password/" $DIRECTORY/../.docker/.env
+sed -i -e "s/POSTGRES_PASSWORD=\S*$/POSTGRES_PASSWORD=$(echo "'")$password$(echo "'")/" $DIRECTORY/../.docker/.env
 if [ "$username" != "" ]; then
   sed -i -e "s/POSTGRES_USER=\S*$/POSTGRES_USER=$username/" $DIRECTORY/../.docker/.env
 fi

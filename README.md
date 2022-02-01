@@ -102,4 +102,5 @@ _Note: When using `docker compose` commands, be sure you are in the root directo
 
 ### _General Tips_
 * If you change the database username or password in the `.docker/.env`, the containerized app will fail to connect to the database in `.docker/volumes/database`. If this occurs during development and the database contents are disposable, simply delete the database folder using `sudo rm -fr .docker/volumes/database` from the project's root directory. This will delete the databases and the data stored in them, allowing Docker to rebuild the databases with your new username and password.
-* More tips coming...
+* If `ror/config/master.key` cannot be found, run `rails credentials:edit` inside `ror/` to generate a new one.
+* If you need a new master key, delete `ror/config/master.key` and `ror/config/credentials.yml.enc`, then run `rails credentials:edit` inside `ror/` to generate a new ones.

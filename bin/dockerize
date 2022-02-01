@@ -21,7 +21,6 @@ DIRECTORY=$(dirname "${BASH_SOURCE[0]}")
 echo "This program requires either Ruby to run"
 which ruby
 echo "Test for Ruby succeeded"
-echo ""
 
 # Testing for port number
 if [ "$port" = "" ]; then
@@ -53,14 +52,29 @@ done
 echo ""
 # Handle action based on user response
 if [ "$accept" = "true" ]; then
-  cp $DIRECTORY/../.docker/example.database.yml $DIRECTORY/../ror/config/database.yml
-  echo "---------------------------------------------------------------"
-  echo "Overwrote ror/config/database.yml"
-  echo "---------------------------------------------------------------"
+  ruby $DIRECTORY/.set-db-config.rb || status=error
+  if [ "$status" = "error" ]; then
+    tput setaf 1;
+    echo "---------------------------------------------------------------"
+    echo "WARNING: OVERWRITE FAILED"
+    echo "Please modify ror/config/database.yml manually using this example:"
+    echo ".docker/example.database.yml"
+    echo "---------------------------------------------------------------"
+    tput sgr0;
+  else
+    echo "---------------------------------------------------------------"
+    echo "Overwrote ror/config/database.yml"
+    echo "---------------------------------------------------------------"
+  fi
 else
+  tput setaf 3;
   echo "---------------------------------------------------------------"
-  echo "Overwrite denied. Please handle this config file manually."
+  echo "Overwrite of ror/config/database.yml denied."
+  echo "Please handle this config file manually using this file as an example:"
+  echo ".docker/example.database.yml"
   echo "---------------------------------------------------------------"
+  tput sgr0;
+  status=warning
 fi
 
 # Create .env file from example.env
@@ -78,5 +92,14 @@ echo "---------------------------------------------------------------"
 
 $DIRECTORY/build-frontend
 
-
 echo "Your app has been Dockerized!!"
+
+if [ "${status}" = "error" ]; then
+  tput setaf 1;
+  echo "Please address overwrite error above in red before continuing."
+  tput sgr0;
+elif [ "${status}" = "warning" ]; then
+  tput setaf 3;
+  echo "Please address overwrite warning above in yellow before continuing."
+  tput sgr0;
+fi

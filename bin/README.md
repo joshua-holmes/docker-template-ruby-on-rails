@@ -18,3 +18,6 @@ This folder contains scripts that save time when setting up and using Docker to 
 * `bin/build-frontend` is either client-side or server-side, but requires npm package manager, and:
   1. Builds the React app using `npm run build`
   2. Replaces the static frontend files in ror/public with the build files that were just created using `npm`
+* `.set-db-config.rb` is used in `bin/dockerize`, but is not meant to be run from the terminal. It:
+  1. Overwrites `ror/config/database.yml` with `.docker/example.database.yml`
+  2. Preserves database names from the original file, so original databases can be used for development, if needed

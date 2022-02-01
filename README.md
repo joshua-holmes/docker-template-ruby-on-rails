@@ -12,7 +12,7 @@ _Note: If you are using React Router Dom with your app, please visit that sectio
 
 ## Instructions: Speedy Version!
 1. Copy and paste your React on Rails application (or make a new one) inside `ror/` so that `ror/` is the root directory of your RoR app.
-2. Run `bin/dockerize -p <PORT_NUMBER>` in your project's local root directory where `<PORT_NUMBER>` is a port number you want your Docker Container to run on. Type `y` or press enter when prompted to overwrite. Here is an example:
+2. Run `bin/dockerize -p <PORT_NUMBER>` in your project's local root directory where `<PORT_NUMBER>` is a port number you want your Docker Container to run on. Type `y` or press enter when prompted to overwrite. This step will preserve database names and will not overwrite them, but will overwrite other settings. If you have custom settings in ror/config/database.yml, other than database names, press `n` instead and follow the instructions in yellow. Here is an example:
 ```
 # (example) in your local repo, run:
 bin/dockerize -p 3001
@@ -26,7 +26,7 @@ bin/server-setup -u username -p 'YourNewSecureP@$$w0rD' -m fakeMasterKey1234abcd
 ## Instructions: Manual Version (good for learning)
 1. Copy and paste your React on Rails application (or make a new one) inside `ror/` so that `ror/` is the root directory of your RoR app.
 2. In `.docker/` copy the `example.env` file into the same directory and rename it `.env`. You do not need to change any variables here in your local repository, but you will need to configure this file on your server repo.
-3. Copy and paste the contents of `.docker/example.database.yml` into `ror/config/database.yml` and replace the contents inside, being careful of any database configurations you have already set for your project (if any).
+3. Copy and paste the contents of `.docker/example.database.yml` into `ror/config/database.yml` and replace the contents inside, being careful of any database configurations you have already set for your project (if any). Preserve the database names from your original file if one of the databases has data that needs to be preserved on your local machine for development.
 4. Open `docker-compose.yml` file in this project's root directory and change the first port number only, to specify which port you want your app to run on. For example change it to `"4000:3000"` if you want to run the app on port 4000. Do not change the second number.
 5. *Skip this step if you do not have a React frontend!* If you want to test your dockerization locally, open your terminal in the root directory of your project and enter `bin/build-frontend`. Then run `sudo docker compose up --build`. Keep in mind that, when it is done loading, the port displayed in your terminal is the internal port number, not the external one. That means that if you set your port to 4000 in the previous step, the terminal will still display port 3000. In this case, you would ignore the terminal and visit port 4000 by going to http://0.0.0.0:4000 and your app should be up.
 6. **Your app is now Dockerized!!** Visit the 'Operation Instructions' section below to read about how to get the app on your server and run Docker Compose, if you have never used it before.
@@ -99,3 +99,7 @@ _Note: When using `docker compose` commands, be sure you are in the root directo
 6. `sudo docker stop <CONTAINER_ID>` takes a container offline, using the container's ID.
 7. `sudo docker rm <CONTAINER_ID>` deletes a container from your local storage. If you login to root using `su` and then typing your password, you can use `docker rm $(docker ps -aq)` to delete all containers on your system. Notice `sudo` is not used. That is because as root, you don't need `sudo` to elevate your privileges, since root already has highest privileges.
 8. `sudo docker rmi <IMAGE_ID>` deletes an image from your local storage. _Before deleting images, make sure a container is not reliant on that image._ If you login to root using `su` and then typing your password, you can use `docker rmi $(docker images -aq)` to delete all images on your system. Notice `sudo` is not used here either.
+
+### _General Tips_
+* If you change the database username or password in the `.docker/.env`, the containerized app will fail to connect to the database in `.docker/volumes/database`. If this occurs during development and the database contents are disposable, simply delete the database folder using `sudo rm -fr .docker/volumes/database` from the project's root directory. This will delete the databases and the data stored in them, allowing Docker to rebuild the databases with your new username and password.
+* More tips coming...

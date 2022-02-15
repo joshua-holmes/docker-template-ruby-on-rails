@@ -8,8 +8,7 @@ This folder contains scripts that save time when setting up and using Docker to 
 * `bin/dockerize -p <PORT>` is a client-side script and:
   1. Creates a new .env file from the example.env file in `.docker/`
   2. Replaces `ror/config/database.yml` with the default template config file
-  3. Runs the `bin/build-frontend` script, *if* there is a React frontend (checks for package.json file existance)
-  4. Changes the port number that the Docker Container runs on, using the -p flag
+  3. Changes the port number that the Docker Container runs on, using the -p flag
 * `bin/server-setup -u <USERNAME> -p <PASSWORD> -m <MASTER_KEY>` is a server-side script and:
   1. Creates a new .env file and sets the database's username (optional), and password in that file, using the -u and -p flags.
   2. Places the master key in `ror/config/master.key`

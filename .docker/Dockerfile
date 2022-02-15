@@ -2,15 +2,13 @@ FROM ruby:2.7.4-alpine
 
 # Install necessary dependencies
 RUN apk update && apk upgrade
-RUN apk add --no-cache build-base postgresql-dev postgresql-client bash tzdata npm
+RUN apk add --no-cache build-base postgresql-dev postgresql-client bash tzdata
 
 # Prepare working directory.
 WORKDIR /ror
 COPY ./ror .
-# The 'build-frontend' script looks in a folder called 'ror', so it must be
-# placed one folder up from /ror
-COPY ./bin/build-frontend ..
-RUN ../build-frontend
+
+# Installing gems. 'tzinfo' is required in this Docker image
 RUN gem install bundler:2.3.4
 RUN bundle install
 RUN bundle add tzinfo-data

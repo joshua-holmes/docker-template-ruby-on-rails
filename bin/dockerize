@@ -93,6 +93,7 @@ echo "---------------------------------------------------------------"
 $DIRECTORY/build-frontend
 
 echo "Your app has been Dockerized!!"
+echo "When you update your app, be sure to run the 'build-frontend' script in the bin folder before pushing to GitHub. For now, that script has automatically been run for you, so you are safe to push."
 
 if [ "${status}" = "error" ]; then
   tput setaf 1;
